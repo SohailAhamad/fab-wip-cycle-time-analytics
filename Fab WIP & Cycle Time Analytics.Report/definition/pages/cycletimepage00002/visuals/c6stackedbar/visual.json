@@ -93,26 +93,6 @@
             }
           }
         }
-      ],
-      "title": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Fab Time Split | queue vs process vs hold, by area'"
-                }
-              }
-            }
-          }
-        }
       ]
     }
   }
