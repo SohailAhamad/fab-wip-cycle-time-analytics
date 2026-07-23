@@ -38,7 +38,7 @@ table dim_equipment
 		mode: import
 		source =
 				let
-				    Source = Csv.Document(File.Contents("D:\Power BI\fab_wip_dataset\dim_equipment.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(File.Contents("D:\Power BI\Fab WIP & Cycle Time Analytics\fabdata\dim_equipment.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"equipment_id", type text}, {"area", type text}, {"vendor", type text}, {"install_year", Int64.Type}})
 				in

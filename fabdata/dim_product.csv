@@ -1,0 +1,5 @@
+product_id,product_name,family
+P100,DRAM-16Gb,Memory
+P200,NAND-256L,Memory
+P300,Logic-7nm,Logic
+P400,Analog-PMIC,Analog

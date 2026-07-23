@@ -29,7 +29,7 @@ table dim_product
 		mode: import
 		source =
 				let
-				    Source = Csv.Document(File.Contents("D:\Power BI\fab_wip_dataset\dim_product.csv"),[Delimiter=",", Columns=3, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(File.Contents("D:\Power BI\Fab WIP & Cycle Time Analytics\fabdata\dim_product.csv"),[Delimiter=",", Columns=3, Encoding=1252, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"product_id", type text}, {"product_name", type text}, {"family", type text}})
 				in

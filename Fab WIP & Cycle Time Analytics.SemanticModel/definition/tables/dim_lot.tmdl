@@ -101,7 +101,7 @@ table dim_lot
 		mode: import
 		source =
 				let
-				    Source = Csv.Document(File.Contents("D:\Power BI\fab_wip_dataset\dim_lot.csv"),[Delimiter=",", Columns=9, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(File.Contents("D:\Power BI\Fab WIP & Cycle Time Analytics\fabdata\dim_lot.csv"),[Delimiter=",", Columns=9, Encoding=1252, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"lot_id", type text}, {"product_id", type text}, {"priority", type text}, {"fab_start", type datetime}, {"fab_out", type datetime}, {"total_cycle_days", type number}, {"wafers_start", Int64.Type}, {"wafers_out", Int64.Type}, {"wafers_scrapped", Int64.Type}}),
 				    #"Added fab_out_date" = Table.AddColumn(#"Changed Type", "fab_out_date", each Date.From([fab_out]), type date)

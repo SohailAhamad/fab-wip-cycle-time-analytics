@@ -50,7 +50,7 @@ table dim_step
 		mode: import
 		source =
 				let
-				    Source = Csv.Document(File.Contents("D:\Power BI\fab_wip_dataset\dim_step.csv"),[Delimiter=",", Columns=5, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(File.Contents("D:\Power BI\Fab WIP & Cycle Time Analytics\fabdata\dim_step.csv"),[Delimiter=",", Columns=5, Encoding=1252, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"step_seq", Int64.Type}, {"step_name", type text}, {"area", type text}, {"target_process_hrs", type number}, {"target_queue_hrs", type number}})
 				in

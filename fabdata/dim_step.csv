@@ -1,0 +1,21 @@
+step_seq,step_name,area,target_process_hrs,target_queue_hrs
+10,Wafer Start,Wafer Prep,1.0,0.5
+20,Initial Clean,Clean,0.8,1.0
+30,Oxidation,Diffusion,4.0,2.0
+40,Nitride Dep,Diffusion,3.0,2.0
+50,Photo Layer 1,Litho,1.5,3.0
+60,Etch Layer 1,Etch,2.0,2.5
+70,Strip & Clean,Clean,0.8,1.0
+80,Implant N-Well,Implant,1.2,2.0
+90,Anneal,Diffusion,5.0,1.5
+100,Photo Layer 2,Litho,1.5,3.5
+110,Etch Layer 2,Etch,2.0,2.5
+120,CMP Oxide,CMP,1.0,2.0
+130,Metrology CD,Metrology,0.5,1.0
+140,Metal Dep,Thin Films,3.5,2.0
+150,Photo Metal,Litho,1.5,3.0
+160,Etch Metal,Etch,2.0,2.5
+170,CMP Metal,CMP,1.0,2.0
+180,Metrology Overlay,Metrology,0.5,1.0
+190,Final Clean,Clean,0.8,1.0
+200,E-Test / Probe,Test,6.0,4.0

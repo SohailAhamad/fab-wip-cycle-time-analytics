@@ -172,7 +172,7 @@ table fact_lot_movement
 		mode: import
 		source =
 				let
-				    Source = Csv.Document(File.Contents("D:\Power BI\fab_wip_dataset\fact_lot_movement.csv"),[Delimiter=",", Columns=16, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(File.Contents("D:\Power BI\Fab WIP & Cycle Time Analytics\fabdata\fact_lot_movement.csv"),[Delimiter=",", Columns=16, Encoding=1252, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"lot_id", type text}, {"product_id", type text}, {"step_seq", Int64.Type}, {"step_name", type text}, {"area", type text}, {"equipment_id", type text}, {"track_in", type datetime}, {"track_out", type datetime}, {"qty_in", Int64.Type}, {"qty_out", Int64.Type}, {"queue_hrs", type number}, {"process_hrs", type number}, {"hold_flag", Int64.Type}, {"hold_reason", type text}, {"hold_hrs", type number}, {"rework_flag", Int64.Type}}),
 				    #"Added step_total_hrs" = Table.AddColumn(#"Changed Type", "step_total_hrs", each [queue_hrs] + [process_hrs] + [hold_hrs], type number),
