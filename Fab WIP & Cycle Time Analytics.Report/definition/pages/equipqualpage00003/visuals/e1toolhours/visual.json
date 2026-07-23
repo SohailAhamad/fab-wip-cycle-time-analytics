@@ -83,6 +83,28 @@
           }
         }
       ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Tool Process Hours | top 15 tools'"
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

@@ -66,6 +66,28 @@
           }
         }
       ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Holds | by reason (all time)'"
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }
