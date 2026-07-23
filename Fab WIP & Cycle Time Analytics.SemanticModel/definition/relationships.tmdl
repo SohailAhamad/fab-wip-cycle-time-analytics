@@ -1,0 +1,30 @@
+relationship AutoDetected_8365400e-1256-4ae3-af0f-3d0d0f28bd0c
+	fromColumn: fact_lot_movement.equipment_id
+	toColumn: dim_equipment.equipment_id
+
+relationship AutoDetected_7388a774-83df-4005-b3b2-96dc1c7957b6
+	fromColumn: fact_lot_movement.lot_id
+	toColumn: dim_lot.lot_id
+
+relationship AutoDetected_c982bbf2-31de-4f71-99b7-e4db7bfbb834
+	fromColumn: fact_lot_movement.step_seq
+	toColumn: dim_step.step_seq
+
+relationship fabwip1a2b3c4d-0001-4a1a-9c1a-000000000001
+	fromColumn: fact_lot_movement.product_id
+	toColumn: dim_product.product_id
+
+relationship fabwip1a2b3c4d-0002-4a1a-9c1a-000000000002
+	fromColumn: fact_lot_movement.track_out_date
+	toColumn: dim_date.Date
+
+relationship fabwip1a2b3c4d-0005-4a1a-9c1a-000000000005
+	isActive: false
+	fromColumn: dim_lot.fab_out_date
+	toColumn: dim_date.Date
+
+relationship fabwip1a2b3c4d-0004-4a1a-9c1a-000000000004
+	isActive: false
+	fromColumn: dim_lot.product_id
+	toColumn: dim_product.product_id
+

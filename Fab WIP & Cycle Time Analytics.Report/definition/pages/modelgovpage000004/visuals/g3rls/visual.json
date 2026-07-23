@@ -1,0 +1,78 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "g3rls",
+  "position": {
+    "x": 16,
+    "y": 456,
+    "z": 2000,
+    "height": 248,
+    "width": 1248,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Row-Level Security: Area_Litho",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "14pt",
+                      "color": "#FFFFFF"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Role: Area_Litho. Table filter on dim_equipment: [area] = \"Litho\". Propagation: dim_equipment sits on the one side of a single-direction relationship into fact_lot_movement, so this filter restricts every fact-based measure (Queue Hours, Process Hours, Holds Count, Scrap Units, Tool Process Hours, and WIP measures) to Litho-tool activity. It does NOT restrict dim_lot, dim_product, or dim_step directly, since filters cannot flow backward up a many-to-one relationship without bidirectionality, which this model intentionally avoids. Full lot-level isolation would require either a bidirectional relationship or a second RLS filter directly on dim_lot."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Row-Level Security & Propagation'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

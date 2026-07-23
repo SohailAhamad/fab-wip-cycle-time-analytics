@@ -1,0 +1,62 @@
+table dim_step
+	lineageTag: 8dea2200-a022-4e7a-9621-520cb20649e5
+
+	column step_seq
+		dataType: int64
+		formatString: 0
+		lineageTag: 06773ad5-448f-4712-af2f-378014226c5f
+		summarizeBy: none
+		sourceColumn: step_seq
+
+		annotation SummarizationSetBy = Automatic
+
+	column step_name
+		dataType: string
+		lineageTag: 8bef3eda-21f8-4d59-b6ce-65e0476bf9ee
+		summarizeBy: none
+		sourceColumn: step_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column area
+		dataType: string
+		lineageTag: 587e7302-5d5e-4596-802a-e5566ed66d6c
+		summarizeBy: none
+		sourceColumn: area
+
+		annotation SummarizationSetBy = Automatic
+
+	column target_process_hrs
+		dataType: double
+		lineageTag: 57d42db7-86d9-48b7-90ae-7f8e154c7d55
+		summarizeBy: none
+		sourceColumn: target_process_hrs
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column target_queue_hrs
+		dataType: double
+		lineageTag: f77f5c5a-36df-4b2f-a07c-3892c6eea4cf
+		summarizeBy: none
+		sourceColumn: target_queue_hrs
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition dim_step = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\Power BI\fab_wip_dataset\dim_step.csv"),[Delimiter=",", Columns=5, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"step_seq", Int64.Type}, {"step_name", type text}, {"area", type text}, {"target_process_hrs", type number}, {"target_queue_hrs", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

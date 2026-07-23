@@ -1,0 +1,250 @@
+table _Measures
+	lineageTag: fabd0001-a001-4a1a-9c1a-000000000401
+
+	measure 'Snapshot Date' = SELECTEDVALUE ( 'SnapshotDate'[SnapshotDate], DATE(2026,4,1) )
+		formatString: Long Date
+		displayFolder: _Internal
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000402
+
+	measure 'WIP Lots' =
+			VAR _Snap = [Snapshot Date]
+			RETURN
+			    CALCULATE (
+			        DISTINCTCOUNT ( dim_lot[lot_id] ),
+			        dim_lot[fab_start] <= _Snap,
+			        dim_lot[fab_out] > _Snap,
+			        TREATAS ( VALUES ( dim_product[product_id] ), dim_lot[product_id] )
+			    )
+		formatString: #,##0
+		displayFolder: WIP
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000403
+
+	measure 'Hot Lot WIP' = CALCULATE ( [WIP Lots], dim_lot[priority] IN { "Hot", "Super Hot" } )
+		formatString: #,##0
+		displayFolder: WIP
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000404
+
+	measure 'WIP Wafers' =
+			VAR _Snap = [Snapshot Date]
+			VAR _OpenLots =
+			    CALCULATETABLE (
+			        VALUES ( dim_lot[lot_id] ),
+			        dim_lot[fab_start] <= _Snap,
+			        dim_lot[fab_out] > _Snap,
+			        TREATAS ( VALUES ( dim_product[product_id] ), dim_lot[product_id] )
+			    )
+			RETURN
+			    SUMX (
+			        _OpenLots,
+			        VAR _Lot = dim_lot[lot_id]
+			        VAR _WafersStart =
+			            CALCULATE ( SUM ( dim_lot[wafers_start] ), dim_lot[lot_id] = _Lot, ALL ( dim_lot ) )
+			        VAR _ScrapToDate =
+			            CALCULATE (
+			                SUM ( fact_lot_movement[scrap_units] ),
+			                fact_lot_movement[lot_id] = _Lot,
+			                fact_lot_movement[track_out] <= _Snap,
+			                ALL ( fact_lot_movement )
+			            )
+			        RETURN _WafersStart - _ScrapToDate
+			    )
+		formatString: #,##0
+		displayFolder: WIP
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000405
+
+	measure 'WIP Lots (Current Step Area)' =
+			VAR _Snap = [Snapshot Date]
+			VAR _OpenLots =
+			    CALCULATETABLE (
+			        VALUES ( dim_lot[lot_id] ),
+			        dim_lot[fab_start] <= _Snap,
+			        dim_lot[fab_out] > _Snap,
+			        TREATAS ( VALUES ( dim_product[product_id] ), dim_lot[product_id] )
+			    )
+			VAR _WithCurrentArea =
+			    ADDCOLUMNS (
+			        _OpenLots,
+			        "@CurrentArea",
+			            VAR _Lot = dim_lot[lot_id]
+			            VAR _InProgress =
+			                CALCULATETABLE (
+			                    fact_lot_movement,
+			                    ALL ( fact_lot_movement ),
+			                    fact_lot_movement[lot_id] = _Lot,
+			                    fact_lot_movement[track_in] <= _Snap,
+			                    fact_lot_movement[track_out] >= _Snap
+			                )
+			            RETURN
+			                IF (
+			                    COUNTROWS ( _InProgress ) > 0,
+			                    MAXX ( _InProgress, fact_lot_movement[area] ),
+			                    VAR _MaxOut =
+			                        CALCULATE (
+			                            MAX ( fact_lot_movement[track_out] ),
+			                            ALL ( fact_lot_movement ),
+			                            fact_lot_movement[lot_id] = _Lot,
+			                            fact_lot_movement[track_out] <= _Snap
+			                        )
+			                    VAR _LastRow =
+			                        CALCULATETABLE (
+			                            fact_lot_movement,
+			                            ALL ( fact_lot_movement ),
+			                            fact_lot_movement[lot_id] = _Lot,
+			                            fact_lot_movement[track_out] = _MaxOut
+			                        )
+			                    RETURN MAXX ( _LastRow, fact_lot_movement[area] )
+			                )
+			    )
+			RETURN
+			    COUNTROWS ( FILTER ( _WithCurrentArea, [@CurrentArea] IN VALUES ( fact_lot_movement[area] ) ) )
+		formatString: #,##0
+		displayFolder: WIP
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000406
+
+	measure 'Lot Count' = COUNTROWS ( dim_lot )
+		formatString: #,##0
+		displayFolder: Cycle Time
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000425
+
+	measure 'Avg Cycle Days' =
+			VAR _Snap = [Snapshot Date]
+			RETURN
+			    CALCULATE ( AVERAGE ( dim_lot[total_cycle_days] ), dim_lot[fab_out] <= _Snap )
+		formatString: #,##0.0
+		displayFolder: Cycle Time
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000407
+
+	measure 'Median Cycle Days' =
+			VAR _Snap = [Snapshot Date]
+			RETURN
+			    CALCULATE ( MEDIAN ( dim_lot[total_cycle_days] ), dim_lot[fab_out] <= _Snap )
+		formatString: #,##0.0
+		displayFolder: Cycle Time
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000408
+
+	measure 'P95 Cycle Days' =
+			VAR _Snap = [Snapshot Date]
+			RETURN
+			    CALCULATE (
+			        PERCENTILEX.INC ( dim_lot, dim_lot[total_cycle_days], 0.95 ),
+			        dim_lot[fab_out] <= _Snap
+			    )
+		formatString: #,##0.0
+		displayFolder: Cycle Time
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000409
+
+	measure 'Avg Cycle Days (by Fab-Out Month)' =
+			CALCULATE (
+			    [Avg Cycle Days],
+			    USERELATIONSHIP ( dim_lot[fab_out_date], dim_date[Date] )
+			)
+		formatString: #,##0.0
+		displayFolder: Cycle Time
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000426
+
+	measure 'Queue Hours' = SUM ( fact_lot_movement[queue_hrs] )
+		formatString: #,##0.0
+		displayFolder: Hours
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000410
+
+	measure 'Process Hours' = SUM ( fact_lot_movement[process_hrs] )
+		formatString: #,##0.0
+		displayFolder: Hours
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000411
+
+	measure 'Hold Hours' = SUM ( fact_lot_movement[hold_hrs] )
+		formatString: #,##0.0
+		displayFolder: Hours
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000412
+
+	measure 'Queue % of Total' = DIVIDE ( [Queue Hours], [Queue Hours] + [Process Hours] + [Hold Hours] )
+		formatString: 0.0%
+		displayFolder: Hours
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000413
+
+	measure 'Holds Count' = CALCULATE ( COUNTROWS ( fact_lot_movement ), fact_lot_movement[hold_flag] = 1 )
+		formatString: #,##0
+		displayFolder: Holds
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000414
+
+	measure 'Avg Hold Hrs' = CALCULATE ( AVERAGE ( fact_lot_movement[hold_hrs] ), fact_lot_movement[hold_flag] = 1 )
+		formatString: #,##0.0
+		displayFolder: Holds
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000415
+
+	measure 'Holds by Reason' = [Holds Count]
+		formatString: #,##0
+		displayFolder: Holds
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000416
+
+	measure 'Active Holds' =
+			VAR _Snap = [Snapshot Date]
+			VAR _OpenLots =
+			    CALCULATETABLE (
+			        VALUES ( dim_lot[lot_id] ),
+			        dim_lot[fab_start] <= _Snap,
+			        dim_lot[fab_out] > _Snap,
+			        TREATAS ( VALUES ( dim_product[product_id] ), dim_lot[product_id] )
+			    )
+			RETURN
+			    CALCULATE (
+			        COUNTROWS ( fact_lot_movement ),
+			        fact_lot_movement[hold_flag] = 1,
+			        fact_lot_movement[track_in] <= _Snap,
+			        fact_lot_movement[track_out] >= _Snap,
+			        TREATAS ( _OpenLots, fact_lot_movement[lot_id] )
+			    )
+		formatString: #,##0
+		displayFolder: Holds
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000427
+
+	measure 'Scrap Units' = SUM ( fact_lot_movement[scrap_units] )
+		formatString: #,##0
+		displayFolder: Scrap and Rework
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000417
+
+	measure 'Scrap Rate %' = DIVIDE ( [Scrap Units], SUM ( fact_lot_movement[qty_in] ) )
+		formatString: 0.0%
+		displayFolder: Scrap and Rework
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000418
+
+	measure 'Rework Rate %' = DIVIDE ( SUM ( fact_lot_movement[rework_flag] ), COUNTROWS ( fact_lot_movement ) )
+		formatString: 0.0%
+		displayFolder: Scrap and Rework
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000419
+
+	measure 'Rework Rate % (Litho)' = CALCULATE ( [Rework Rate %], fact_lot_movement[area] = "Litho" )
+		formatString: 0.0%
+		displayFolder: Scrap and Rework
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000420
+
+	measure 'Tool Process Hours' = [Process Hours]
+		formatString: #,##0.0
+		displayFolder: Equipment
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000421
+
+	measure 'Tool Count' = DISTINCTCOUNT ( fact_lot_movement[equipment_id] )
+		formatString: #,##0
+		displayFolder: Equipment
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000422
+
+	measure 'Cycle Time vs Target %' =
+			VAR _ActualAvg =
+			    AVERAGEX ( fact_lot_movement, fact_lot_movement[queue_hrs] + fact_lot_movement[process_hrs] )
+			VAR _Target =
+			    AVERAGE ( dim_step[target_queue_hrs] ) + AVERAGE ( dim_step[target_process_hrs] )
+			RETURN
+			    DIVIDE ( _ActualAvg, _Target )
+		formatString: 0.0%
+		displayFolder: Equipment
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000423
+
+	column Value
+		lineageTag: 5a437f78-f43e-433a-bfc9-a9707dcd13eb
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = ROW ( "Value", BLANK () )
+

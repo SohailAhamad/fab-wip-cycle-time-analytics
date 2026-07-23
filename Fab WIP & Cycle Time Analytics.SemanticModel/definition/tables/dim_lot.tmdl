@@ -1,0 +1,114 @@
+table dim_lot
+	lineageTag: 7c19e801-5152-44ff-aa2d-bca24592544b
+
+	column lot_id
+		dataType: string
+		lineageTag: 2ef47e70-7a6c-4b43-9442-15f973037978
+		summarizeBy: none
+		sourceColumn: lot_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: string
+		lineageTag: 801ad422-4b8f-496a-9adb-5577080d60ce
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column priority
+		dataType: string
+		lineageTag: 2b4a42dd-95fb-4eaf-83fb-4dd3a1635ef0
+		summarizeBy: none
+		sourceColumn: priority
+
+		annotation SummarizationSetBy = Automatic
+
+	column fab_start
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 010a0efa-04a3-4817-a422-d2d6b140b3b4
+		summarizeBy: none
+		sourceColumn: fab_start
+
+		annotation SummarizationSetBy = Automatic
+
+	column fab_out
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c1bb7807-86be-4a1d-a650-77657f6289ff
+		summarizeBy: none
+		sourceColumn: fab_out
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_cycle_days
+		dataType: double
+		lineageTag: 482d017b-a157-4ac5-a94f-f04b163e7087
+		summarizeBy: sum
+		sourceColumn: total_cycle_days
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column wafers_start
+		dataType: int64
+		formatString: 0
+		lineageTag: dfc8b09c-142f-4b9c-a07e-8a81e1608c11
+		summarizeBy: sum
+		sourceColumn: wafers_start
+
+		annotation SummarizationSetBy = Automatic
+
+	column wafers_out
+		dataType: int64
+		formatString: 0
+		lineageTag: 2332c996-2f94-4c19-8834-ac96942f74be
+		summarizeBy: sum
+		sourceColumn: wafers_out
+
+		annotation SummarizationSetBy = Automatic
+
+	column wafers_scrapped
+		dataType: int64
+		formatString: 0
+		lineageTag: 90d8b530-dc51-4385-9906-2c6fdae13ed5
+		summarizeBy: sum
+		sourceColumn: wafers_scrapped
+
+		annotation SummarizationSetBy = Automatic
+
+	column fab_out_date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: ac612b78-d32d-4822-9952-24de7c06ea62
+		summarizeBy: none
+		sourceColumn: fab_out_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column cycle_days_bin = ROUNDDOWN ( dim_lot[total_cycle_days] / 0.5, 0 ) * 0.5
+		dataType: double
+		formatString: 0.0
+		lineageTag: e604e1d4-7dba-4450-93eb-e4d04a843e05
+		summarizeBy: none
+
+	partition dim_lot = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\Power BI\fab_wip_dataset\dim_lot.csv"),[Delimiter=",", Columns=9, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"lot_id", type text}, {"product_id", type text}, {"priority", type text}, {"fab_start", type datetime}, {"fab_out", type datetime}, {"total_cycle_days", type number}, {"wafers_start", Int64.Type}, {"wafers_out", Int64.Type}, {"wafers_scrapped", Int64.Type}}),
+				    #"Added fab_out_date" = Table.AddColumn(#"Changed Type", "fab_out_date", each Date.From([fab_out]), type date)
+				in
+				    #"Added fab_out_date"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

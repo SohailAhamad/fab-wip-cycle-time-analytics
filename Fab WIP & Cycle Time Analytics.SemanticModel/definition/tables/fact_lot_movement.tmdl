@@ -1,0 +1,187 @@
+table fact_lot_movement
+	lineageTag: 3e7d760e-47ee-4c36-9413-f152631a99c8
+
+	column lot_id
+		dataType: string
+		lineageTag: dd96894d-5440-4bdb-b753-eca135fbe212
+		summarizeBy: none
+		sourceColumn: lot_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: string
+		lineageTag: 4130a4a9-2569-42c8-b7a3-b99eca0657ac
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column step_seq
+		dataType: int64
+		formatString: 0
+		lineageTag: 15ee9966-022e-475a-bd86-480b346b07ca
+		summarizeBy: none
+		sourceColumn: step_seq
+
+		annotation SummarizationSetBy = Automatic
+
+	column step_name
+		dataType: string
+		lineageTag: 25bb5d7f-0cd0-473b-855b-6d6492deb28f
+		summarizeBy: none
+		sourceColumn: step_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column area
+		dataType: string
+		lineageTag: a5b57f1a-e841-4c30-b794-19171ffd6a90
+		summarizeBy: none
+		sourceColumn: area
+
+		annotation SummarizationSetBy = Automatic
+
+	column equipment_id
+		dataType: string
+		lineageTag: 615bbe28-0033-4865-80af-f510a7d7db4e
+		summarizeBy: none
+		sourceColumn: equipment_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column track_in
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bbd07404-cbaa-4f74-be96-618e4fb9007a
+		summarizeBy: none
+		sourceColumn: track_in
+
+		annotation SummarizationSetBy = Automatic
+
+	column track_out
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bab7ef08-fdc6-47bf-8234-500905659bee
+		summarizeBy: none
+		sourceColumn: track_out
+
+		annotation SummarizationSetBy = Automatic
+
+	column qty_in
+		dataType: int64
+		formatString: 0
+		lineageTag: 3690cb68-e81e-41fa-af9d-db13a029c1f9
+		summarizeBy: sum
+		sourceColumn: qty_in
+
+		annotation SummarizationSetBy = Automatic
+
+	column qty_out
+		dataType: int64
+		formatString: 0
+		lineageTag: cf759fe3-881f-4d4e-8368-ce59ce81bf1c
+		summarizeBy: sum
+		sourceColumn: qty_out
+
+		annotation SummarizationSetBy = Automatic
+
+	column queue_hrs
+		dataType: double
+		lineageTag: dd5d723a-b450-4535-9f99-25fb8d7f5fc2
+		summarizeBy: sum
+		sourceColumn: queue_hrs
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column process_hrs
+		dataType: double
+		lineageTag: 1aa37060-e950-4634-857a-380c59a585d5
+		summarizeBy: sum
+		sourceColumn: process_hrs
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column hold_flag
+		dataType: int64
+		formatString: 0
+		lineageTag: 795f4c6c-a966-4f97-9bf0-72ce0d36f0a0
+		summarizeBy: sum
+		sourceColumn: hold_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column hold_reason
+		dataType: string
+		lineageTag: a27ea182-60ca-42fb-9102-c6aaf017ee14
+		summarizeBy: none
+		sourceColumn: hold_reason
+
+		annotation SummarizationSetBy = Automatic
+
+	column hold_hrs
+		dataType: double
+		lineageTag: 9e5da0d2-5bbf-4c12-96af-6e2cbd6e0564
+		summarizeBy: sum
+		sourceColumn: hold_hrs
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column rework_flag
+		dataType: int64
+		formatString: 0
+		lineageTag: 424b9c5d-a6c7-4317-9f97-2774f80847f0
+		summarizeBy: sum
+		sourceColumn: rework_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column step_total_hrs
+		dataType: double
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000301
+		summarizeBy: sum
+		sourceColumn: step_total_hrs
+
+		annotation SummarizationSetBy = Automatic
+
+	column scrap_units
+		dataType: int64
+		formatString: 0
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000302
+		summarizeBy: sum
+		sourceColumn: scrap_units
+
+		annotation SummarizationSetBy = Automatic
+
+	column track_out_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000303
+		summarizeBy: none
+		sourceColumn: track_out_date
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_lot_movement = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\Power BI\fab_wip_dataset\fact_lot_movement.csv"),[Delimiter=",", Columns=16, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"lot_id", type text}, {"product_id", type text}, {"step_seq", Int64.Type}, {"step_name", type text}, {"area", type text}, {"equipment_id", type text}, {"track_in", type datetime}, {"track_out", type datetime}, {"qty_in", Int64.Type}, {"qty_out", Int64.Type}, {"queue_hrs", type number}, {"process_hrs", type number}, {"hold_flag", Int64.Type}, {"hold_reason", type text}, {"hold_hrs", type number}, {"rework_flag", Int64.Type}}),
+				    #"Added step_total_hrs" = Table.AddColumn(#"Changed Type", "step_total_hrs", each [queue_hrs] + [process_hrs] + [hold_hrs], type number),
+				    #"Added scrap_units" = Table.AddColumn(#"Added step_total_hrs", "scrap_units", each [qty_in] - [qty_out], Int64.Type),
+				    #"Added track_out_date" = Table.AddColumn(#"Added scrap_units", "track_out_date", each DateTime.From(Date.From([track_out])), type datetime)
+				in
+				    #"Added track_out_date"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

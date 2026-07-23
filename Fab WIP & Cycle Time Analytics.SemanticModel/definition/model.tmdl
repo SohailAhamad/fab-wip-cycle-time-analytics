@@ -1,0 +1,28 @@
+model Model
+	culture: en-IN
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["dim_equipment","dim_lot","dim_product","dim_step","dim_date","SnapshotDate","fact_lot_movement"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dim_equipment
+ref table dim_lot
+ref table dim_product
+ref table dim_step
+ref table fact_lot_movement
+ref table dim_date
+ref table SnapshotDate
+ref table _Measures
+
+ref role Area_Litho
+
+ref cultureInfo en-IN
+

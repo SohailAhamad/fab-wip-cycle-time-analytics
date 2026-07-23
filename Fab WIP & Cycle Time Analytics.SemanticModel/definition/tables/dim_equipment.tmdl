@@ -1,0 +1,50 @@
+table dim_equipment
+	lineageTag: b16da1fe-67ab-46a3-ae7d-8800c5cb52ad
+
+	column equipment_id
+		dataType: string
+		lineageTag: 7b27e4b8-e65e-48dc-be4e-17dc8304e191
+		summarizeBy: none
+		sourceColumn: equipment_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column area
+		dataType: string
+		lineageTag: 2bc0368f-0646-4214-aaf6-6da79617df63
+		summarizeBy: none
+		sourceColumn: area
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendor
+		dataType: string
+		lineageTag: 418f9516-f6d5-4e1d-b43e-5d519583d968
+		summarizeBy: none
+		sourceColumn: vendor
+
+		annotation SummarizationSetBy = Automatic
+
+	column install_year
+		dataType: int64
+		formatString: 0
+		lineageTag: d844bb04-67b4-444c-884e-79a3e0cd3066
+		summarizeBy: none
+		sourceColumn: install_year
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_equipment = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\Power BI\fab_wip_dataset\dim_equipment.csv"),[Delimiter=",", Columns=4, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"equipment_id", type text}, {"area", type text}, {"vendor", type text}, {"install_year", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

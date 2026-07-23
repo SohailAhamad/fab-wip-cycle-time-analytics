@@ -1,0 +1,44 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "c3p95card",
+  "position": {
+    "x": 852,
+    "y": 64,
+    "z": 2000,
+    "height": 100,
+    "width": 410,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "P95 Cycle Days"
+                }
+              },
+              "queryRef": "_Measures.P95 Cycle Days",
+              "nativeQueryRef": "P95 Cycle Days"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {}
+        }
+      ]
+    }
+  }
+}

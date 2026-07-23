@@ -1,0 +1,64 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "e4reworkcard",
+  "position": {
+    "x": 832,
+    "y": 280,
+    "z": 3000,
+    "height": 100,
+    "width": 432,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Rework Rate % (Litho)"
+                }
+              },
+              "queryRef": "_Measures.Rework Rate % (Litho)",
+              "nativeQueryRef": "Rework Rate % (Litho)"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {}
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Rework Rate | litho'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

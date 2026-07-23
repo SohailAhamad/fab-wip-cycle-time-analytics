@@ -1,0 +1,78 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "e5vendor",
+  "position": {
+    "x": 16,
+    "y": 496,
+    "z": 4000,
+    "height": 208,
+    "width": 1248,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_equipment"
+                    }
+                  },
+                  "Property": "vendor"
+                }
+              },
+              "queryRef": "dim_equipment.vendor",
+              "nativeQueryRef": "vendor",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Tool Process Hours"
+                }
+              },
+              "queryRef": "_Measures.Tool Process Hours",
+              "nativeQueryRef": "Tool Process Hours"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Process Hours | by vendor'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

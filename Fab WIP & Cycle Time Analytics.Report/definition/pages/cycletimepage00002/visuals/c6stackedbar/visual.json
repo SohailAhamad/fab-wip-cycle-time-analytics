@@ -1,0 +1,119 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "c6stackedbar",
+  "position": {
+    "x": 16,
+    "y": 356,
+    "z": 5000,
+    "height": 260,
+    "width": 1248,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "hundredPercentStackedBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_lot_movement"
+                    }
+                  },
+                  "Property": "area"
+                }
+              },
+              "queryRef": "fact_lot_movement.area",
+              "nativeQueryRef": "area",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Queue Hours"
+                }
+              },
+              "queryRef": "_Measures.Queue Hours",
+              "nativeQueryRef": "Queue Hours"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Process Hours"
+                }
+              },
+              "queryRef": "_Measures.Process Hours",
+              "nativeQueryRef": "Process Hours"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Hold Hours"
+                }
+              },
+              "queryRef": "_Measures.Hold Hours",
+              "nativeQueryRef": "Hold Hours"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Fab Time Split | queue vs process vs hold, by area'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

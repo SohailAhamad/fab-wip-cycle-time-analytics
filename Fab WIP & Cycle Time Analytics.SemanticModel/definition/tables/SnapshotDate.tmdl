@@ -1,0 +1,22 @@
+table SnapshotDate
+	lineageTag: fabd0001-a001-4a1a-9c1a-000000000201
+
+	column SnapshotDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: fabd0001-a001-4a1a-9c1a-000000000202
+		summarizeBy: none
+		sourceColumn: SnapshotDate
+
+	partition SnapshotDate = m
+		mode: import
+		source =
+				let
+				    Source = List.Dates(#date(2024,1,1), 1461, #duration(1,0,0,0)),
+				    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), {"SnapshotDate"}, null, ExtraValues.Error),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Converted to Table", {{"SnapshotDate", type datetime}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

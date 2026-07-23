@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Fab WIP & Cycle Time Analytics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "18b98780-0fd9-42e8-bf0e-03899b8e9c2f"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "c4histogram",
+  "position": {
+    "x": 16,
+    "y": 180,
+    "z": 3000,
+    "height": 168,
+    "width": 620,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_lot"
+                    }
+                  },
+                  "Property": "cycle_days_bin"
+                }
+              },
+              "queryRef": "dim_lot.cycle_days_bin",
+              "nativeQueryRef": "cycle_days_bin",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Lot Count"
+                }
+              },
+              "queryRef": "_Measures.Lot Count",
+              "nativeQueryRef": "Lot Count"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Lot Count | cycle-time (0.5d bins)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

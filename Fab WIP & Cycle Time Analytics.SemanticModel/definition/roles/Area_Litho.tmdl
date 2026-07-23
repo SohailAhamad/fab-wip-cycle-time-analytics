@@ -1,0 +1,7 @@
+role Area_Litho
+	modelPermission: read
+
+	tablePermission dim_equipment = [area] = "Litho"
+
+	annotation PBI_Id = 70b4be3b7e944e8694866236f9f92652
+

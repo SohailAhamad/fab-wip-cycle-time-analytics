@@ -1,0 +1,78 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "v6familydonut",
+  "position": {
+    "x": 525,
+    "y": 180,
+    "z": 5000,
+    "height": 524,
+    "width": 365,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "donutChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_product"
+                    }
+                  },
+                  "Property": "family"
+                }
+              },
+              "queryRef": "dim_product.family",
+              "nativeQueryRef": "family",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "WIP Wafers"
+                }
+              },
+              "queryRef": "_Measures.WIP Wafers",
+              "nativeQueryRef": "WIP Wafers"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'WIP Wafers | by family'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
